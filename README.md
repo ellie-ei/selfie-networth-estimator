@@ -136,5 +136,5 @@ top_similar_profiles: 3 most visually similar celebrities
 To test the API locally, run
 
 ```bash
-curl -X POST "http://localhost:8000/predict/" -F "file=@Halle_Berry.jpg"
+curl -X POST "https://you-modal-id--clip-networth-api-fastapi-app.modal.run/predict/" -F "file=@Halle_Berry.jpg"
 ```
