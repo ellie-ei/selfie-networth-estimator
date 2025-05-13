@@ -75,6 +75,14 @@ This project expects Qdrant to be running locally via Docker:
 docker run -p 6333:6333 qdrant/qdrant
 ```
 
+Then, [download the images](https://drive.google.com/file/d/1UQVtM-oAUMyOK3z7_hdAWzPp04hjHSKx/view?usp=sharing) and place them in the `dataset/images` folder.
+
+Run the following script to extract image embeddings and populate the vector database:
+
+```bash
+python prepare_vector_databse.py
+```
+
 ### 4. Run with Docker
 
 ```bash
