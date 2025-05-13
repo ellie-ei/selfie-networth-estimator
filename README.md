@@ -33,6 +33,8 @@ This project builds an API that estimates a person's net worth from a selfie ima
 ├── dataset/
 │   ├── celebrity_names_networth.csv  # Celebrity names and net worth
 │   └── data_prep.ipynb               # Notebook for data extraction and image scraping
+├── prepare_vector_database.py        # Prepare the Qdrant database with embeddings and net worth
+├── train_regression_model.ipynb      # Train the regression model using extracted emebddings
 ├── requirements.txt
 ├── Dockerfile
 └── README.md
