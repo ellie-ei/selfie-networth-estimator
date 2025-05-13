@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+transformers
+torch
+torchvision
+pillow
+qdrant-client
+joblib
+xgboost
+pandas
+scikit-learn
+python-multipart
+matplotlib
+duckduckgo_search
