@@ -1,3 +1,4 @@
+import os
 import torch
 import numpy as np
 import joblib
@@ -39,7 +40,10 @@ def load_dependencies():
 
         regressor = joblib.load("app/networth_regressor.pkl")
 
-        qdrant = QdrantClient(host="host.docker.internal", port=6333)
+        qdrant = QdrantClient(
+            url=os.getenv("QDRANT_URL"),
+            api_key=os.getenv("QDRANT_API_KEY")
+            )
 
         logger.info("All dependencies loaded successfully.")
     except Exception as e:

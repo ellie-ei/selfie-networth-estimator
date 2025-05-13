@@ -1,3 +1,4 @@
+import os
 import logging
 from pathlib import Path
 
@@ -55,7 +56,10 @@ def main():
     logger.info(f"Loaded dataset with {len(df)} rows.")
 
     # Connect to Qdrant
-    client = QdrantClient(host="localhost", port=6333)
+    client = QdrantClient(
+        url=os.getenv("QDRANT_URL"),
+        api_key=os.getenv("QDRANT_API_KEY")
+        )
 
     try:
         client.create_collection(
