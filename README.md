@@ -96,8 +96,16 @@ The dataset and image scraping are for demonstration only.
 ### 🧠 Model Details
 
 Embeddings: CLIP (ViT-B/32)
-Regression: Ridge and XGBoost were tested; final model was XGBoost with log-transformed targets
-Target: log1p(net_worth) to handle skew
+
+Regression:
+
+- Linear Regression
+- Ridge Regression
+- Lasso Regression
+- ElasticNet Regression
+- Polynomial Regression (degree=2)
+
+Final model was Ridge with log-transformed targets
 
 ### 📤 API Endpoint
 
