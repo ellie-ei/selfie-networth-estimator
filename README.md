@@ -20,6 +20,7 @@ This project builds an API that estimates a person's net worth from a selfie ima
 - [Qdrant](https://qdrant.tech/) for similarity search
 - [Scikit-learn](https://scikit-learn.org/) for regression
 - [Docker](https://www.docker.com/) for containerization
+- [Modal](https://modal.com) for deployment
 
 ---
 
@@ -27,22 +28,24 @@ This project builds an API that estimates a person's net worth from a selfie ima
 
 ```
 .
-├── app/
-│   ├── main.py                  # FastAPI app
-│   └── networth_regressor.pkl   # Trained regression model
+├── models/
+│   └── networth_regressor.pkl         # Trained regression model
 ├── dataset/
 │   ├── celebrity_names_networth.csv  # Celebrity names and net worth
-│   └── data_prep.ipynb               # Notebook for data extraction and image scraping
-├── prepare_vector_database.py        # Prepare the Qdrant database with embeddings and net worth
-├── train_regression_model.ipynb      # Train the regression model using extracted emebddings
-├── requirements.txt
-├── Dockerfile
+│   └── data_prep.ipynb               # Data extraction and image scraping
+├── prepare_vector_database.py        # Populate Qdrant with image embeddings
+├── train_regression_model.ipynb      # Train regression model using embeddings
+├── upload_model.py                   # Upload model weights to Modal Volume
+├── app_modal.py                      # Deploy FastAPI app on Modal
+├── requirements.txt                  # Python dependencies
 └── README.md
 ```
 
 ---
 
-## 🛠️ How to Run Locally
+## 🛠️ How to Deploy
+
+Modal is used for deployment. Make sure to set up your envrionment with Modal.
 
 ### 1. Clone the Repository
 
@@ -51,44 +54,48 @@ git clone https://github.com/ellie-ei/networth-api.git
 cd networth-api
 ```
 
-### 2. Create conda environtment
+### 2. Upload the Model to Modal
 
-```
-# Create a new environment
-conda create -n networth-env python=3.12
-
-# Activate it
-conda activate networth-env
-
-# Install dependencies
-pip install -r requirements.txt
-
-# (Optional) Enable Jupyter support
-pip install ipykernel
-```
-
-### 3. Qdrant Setup
-
-This project expects Qdrant to be running locally via Docker:
+This stores the trained regression model in a Modal volume for persistent use.
 
 ```bash
-docker run -p 6333:6333 qdrant/qdrant
+modal run upload_model
 ```
 
-Then, [download the images](https://drive.google.com/file/d/1UQVtM-oAUMyOK3z7_hdAWzPp04hjHSKx/view?usp=sharing) and place them in the `dataset/images` folder.
+### 3. Deploy the API on Modal
 
-Run the following script to extract image embeddings and populate the vector database:
+Add your Qdrant API key as secrets in Modal and deploy your app:
+
+```bash
+modal secret create qdrant-secret \
+  QDRANT_URL=https://your-instance.cloud.qdrant.io \
+  QDRANT_API_KEY=your-api-key-here
+
+modal deploy app_modal
+```
+
+## Qdrant Setup
+
+This app uses Qdrant as a vector database for similarity search.
+
+### ✅ Steps
+
+1. Create a Qdrant API key and make sure your Qdrant instance is running.
+
+2. Download and extract the dataset:
+📁 [Download the images](https://drive.google.com/file/d/1UQVtM-oAUMyOK3z7_hdAWzPp04hjHSKx/view?usp=sharing) and place them in the `dataset/images` folder.
+
+3. Run the following script to extract image embeddings and populate the vector database:
 
 ```bash
 python prepare_vector_databse.py
 ```
 
-### 4. Run with Docker
+This script will:
 
-```bash
-docker build -t networth-api .
-docker run -p 8000:8000 networth-api
-```
+- Load the images
+- Generate CLIP embeddings
+- Store them in Qdrant with associated metadata (name, net worth)
 
 ### 📸 Dataset
 
